@@ -1,0 +1,22 @@
+{# 引用base.html #}
+{% extends 'base.html' %}
+
+{# 导入静态文件，以供备用 #}
+{% load staticfiles %}
+
+{# head #}
+{% block title %}
+    主页
+{% endblock %}
+
+{% block head_extends %}
+{% endblock %}
+{# head #}
+
+{# body #}
+{% block nav_index_active %}active{% endblock %}
+
+{% block content %}
+    <h3>欢迎访问我的主页</h3>
+{% endblock %}
+{# body #}
