@@ -11,43 +11,41 @@
 {% block nav_blog_active %}active{% endblock %}
 
 {% block content %}
-    <div class="container-fluid">
-        <div class="col-xs-10 col-xs-offset-1">
-                <h1>{{ blog.title }}</h1>
-            <div class="blog_detail_info">
-                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;{{ blog.author }}&nbsp;&nbsp;&nbsp;
-                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp{{ blog.created_time|date:" Y-m-d H:i" }}&nbsp;&nbsp;&nbsp;
-                <a href="{% url 'blog:blog_relevant' blog.blog_type.id %}">
-                    <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>&nbsp;{{ blog.blog_type }}
-                </a>
-            </div>
-            <div class="panel panel-default">
-              <div class="panel-body">
-                <p class="blog_content">{{ blog.content }}</p>
-              </div>
+    <div class="col-xs-10 col-xs-offset-1">
+            <h1>{{ blog.title }}</h1>
+        <div class="blog_detail_info">
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;{{ blog.author }}&nbsp;&nbsp;&nbsp;
+            <span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp{{ blog.created_time|date:" Y-m-d H:i" }}&nbsp;&nbsp;&nbsp;
+            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>&nbsp;{{ blog.get_read_num }}&nbsp;&nbsp;&nbsp;
+            <a href="{% url 'blog:blog_relevant' blog.blog_type.id %}">
+                <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>&nbsp;{{ blog.blog_type }}
+            </a>&nbsp;&nbsp;&nbsp;
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <p class="blog_content">{{ blog.content|safe }}</p>
+          </div>
 
-                <div class="panel-footer">
-                    <ul class="pager">
-                    <li class="previous">
-                        {% if blog_previous %}
-                        <a href="/blog/detail/{{ blog_previous.id }}">上一篇：{{ blog_previous.title }}</a>
-                        {% else %}
-                            <span>上一篇：<span class="glyphicon glyphicon-ban-circle"></span></span>
-                        {% endif %}
-                    </li>
+            <div class="panel-footer">
+                <ul class="pager">
+                <li class="previous">
+                    {% if blog_previous %}
+                    <a href="/blog/detail/{{ blog_previous.id }}">上一篇：{{ blog_previous.title }}</a>
+                    {% else %}
+                        <span>上一篇：<span class="glyphicon glyphicon-ban-circle"></span></span>
+                    {% endif %}
+                </li>
 
-                    <li class="next">
-                        {% if blog_next %}
-                        <a href="/blog/detail/{{ blog_next.id }}">下一篇：{{ blog_next.title }}</a>
-                        {% else %}
-                            <span>下一篇：<span class="glyphicon glyphicon-ban-circle"></span></span>
-                        {% endif %}
-                    </li>
-                    </ul>
-                </div>
+                <li class="next">
+                    {% if blog_next %}
+                    <a href="/blog/detail/{{ blog_next.id }}">下一篇：{{ blog_next.title }}</a>
+                    {% else %}
+                        <span>下一篇：<span class="glyphicon glyphicon-ban-circle"></span></span>
+                    {% endif %}
+                </li>
+                </ul>
             </div>
         </div>
     </div>
-
 
 {% endblock %}
