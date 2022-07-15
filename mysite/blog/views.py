@@ -6,6 +6,8 @@ from django.core.paginator import Paginator
 
 from django.db.models import Sum,Count,Min,Max,Avg
 
+from read_count.views import toBe_or_NotToBe
+
 # 导入settings.py
 from django.conf import settings
 
@@ -31,7 +33,7 @@ def get_blog_list_common(request, blogs):
 
     context = {
         'page_of_blogs': page_of_blogs,  # 分页器
-        'page_range': page_range,  # 分页器
+        'page_range': page_range,  # 分页器范围
         'blog_types': BlogType.objects.annotate(blog_count = Count('blog')),    # 显示总的博客分类及各分类下的博客数量
         'blog_dates': blog_dates_dict,
     }
@@ -40,13 +42,19 @@ def get_blog_list_common(request, blogs):
 def blog_detail(request,blog_id):# 性能硬伤
     blog_current = get_object_or_404(Blog, id=blog_id)
 
+    read_cookie = toBe_or_NotToBe(request, blog_current)
+
     context = {
         'blog' : blog_current,
         'blog_previous' : Blog.objects.filter(created_time__gt=blog_current.created_time).last(),
         'blog_next' : Blog.objects.filter(created_time__lt=blog_current.created_time).first(),
     }
 
-    return render_to_response('blog/blog_detail.html', context)
+    response = render_to_response('blog/blog_detail.html', context)
+    if read_cookie !='':    # 已读情况下，不刷新cookie的生存时间
+        response.set_cookie(key=read_cookie, value='True', max_age=300)
+
+    return response
 
 def blog_list(request):
     blogs = Blog.objects.all()        # 获取需要的博文们blogs
