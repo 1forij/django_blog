@@ -52,29 +52,60 @@
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
+      <ul class="nav navbar-nav navbar-right" id="auth">
+          {% if user.is_authenticated %}
+              <li><a>欢迎!  {{ user.username }}</a></li>
+              <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">操作集<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">收到的回复</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">我的收藏</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#" id="logout">退出登录</a></li>
+                  </ul>
+              </li>
+          {% else %}
+              <li><a href="/user_auth/login/">登录</a></li>
+              <li><a href="/user_auth/register/">注册</a></li>
+          {% endif %}
+
+
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
 
-
+<div class="container-fluid">
     {% block content %}
 
     {% endblock %}
-
+</div>
 <script src="https://code.jquery.com/jquery.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+
+{# logout后刷新为登录/注册  #}
+<script type="text/javascript">
+    $('#logout').click(function () {
+        $.ajax({
+                url: "/user_auth/logout",
+                type: 'GET',
+                catch: false,
+                success: function (data) {
+                    console.log(data);
+                    if (data['status'] == 'SUCCESS'){
+                        $("#auth").load(location.href+" #auth");   {# 刷新auth此处的样式 #}
+                    }
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+                }
+            })
+        return false;
+    });
+</script>
+{% block script_extends %}
+{% endblock %}
+
 </body>
 </html>

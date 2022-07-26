@@ -10,7 +10,6 @@
 {% block nav_blog_active %}active{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
     <div class="row">
         <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9">
             <div class="panel panel-primary">
@@ -33,12 +32,17 @@
                                 <div class="blog_info">
                                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;{{ blog.author }}&nbsp;&nbsp;&nbsp;
                                 <span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp{{ blog.created_time|date:" Y-m-d H:i" }}&nbsp;&nbsp;&nbsp;
+                                {% if blog.get_read_num %}
+                                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>&nbsp;{{ blog.get_read_num }}&nbsp;&nbsp;&nbsp;
+                                {% else %}
+                                    <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+                                {% endif %}&nbsp;&nbsp;&nbsp;&nbsp;
                                 <a href="{% url 'blog:blog_relevant' blog.blog_type.id %}">
                                     <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>&nbsp;{{ blog.blog_type }}
-                                </a>
+                                </a>&nbsp;&nbsp;&nbsp;
                                 </div>
                             </small>
-                            <p>{{ blog.content|truncatechars_html:100 }}</p>
+                            <p>{{ blog.content|safe|truncatechars_html:100 }}</p>
                         </div>
                     {% empty %}
                         <div class="blog">
@@ -167,7 +171,6 @@
         </div>
 
     </div>
-</div>
 
 
 
